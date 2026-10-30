@@ -1,0 +1,268 @@
+@charset "UTF-8";
+/* ==========================================================================
+   BcBlogEssaySoftTheme : baserCMS5 エッセイのブログテーマ（やわらかい）
+
+   スタイル：やわらかい（Soft）
+   白地に、メインの色を薄めたパステルの面。丸みのある見出し（Zen Maru Gothic）と、角の丸い写真・箱で、親しみやすい日記帳。
+   1カラム（サイドバーは本文の下。中身がなければ出さない）。目次は出さない（config/setting.php の toc）。
+   4色はテーマ設定（config.css の --theme-*）が優先。ここの値は、テーマ設定が空のときの代わりの値
+   ========================================================================== */
+:root {
+	--main: var(--theme-main, #e07a5f);   /* メイン：ボタン・強調・アクセント */
+	--sub: var(--theme-sub, #3d405b);     /* サブ：見出しの文字・濃い背景 */
+	--link: var(--theme-link, #c4573c);   /* リンク */
+	--hover: var(--theme-hover, #9c4430); /* リンクのホバー */
+	--font-body: "Zen Kaku Gothic New", "Hiragino Sans", "Yu Gothic", sans-serif;
+	--font-head: "Zen Maru Gothic", "Zen Kaku Gothic New", sans-serif;
+	--font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+	--bg: #ffffff;
+	--surface: #ffffff;
+	--paper2: color-mix(in oklab, var(--sub) 5%, #fff);
+	--tint: color-mix(in oklab, var(--main) 11%, #fff);
+	--tint2: color-mix(in oklab, var(--main) 20%, #fff);
+	--field: #ffffff;
+	--fg: #34353b;
+	--fg-soft: color-mix(in oklab, #34353b 86%, #fff);
+	--fg-muted: #62646c;
+	--line: color-mix(in oklab, var(--sub) 14%, #fff);
+	--line-strong: color-mix(in oklab, #34353b 38%, #fff);
+	--ph-bg: var(--paper2);
+	--radius: 12px;
+	--radius-l: 18px;
+	--shadow: none;
+	--shadow-hover: none;
+	--measure: 680px;
+}
+:root[data-theme="dark"] {
+	--bg: color-mix(in oklab, var(--sub) 14%, #17181c);
+	--surface: var(--bg);
+	--paper2: color-mix(in oklab, var(--sub) 18%, #202127);
+	--tint: color-mix(in oklab, var(--main) 13%, #202127);
+	--tint2: color-mix(in oklab, var(--main) 22%, #24252b);
+	--field: #24252b;
+	--fg: #e8e8ec;
+	--fg-soft: color-mix(in oklab, #e8e8ec 86%, #17181c);
+	--fg-muted: #a7a9b1;
+	--line: color-mix(in oklab, var(--sub) 20%, #34353c);
+	--line-strong: color-mix(in oklab, #e8e8ec 40%, #17181c);
+}
+body { font-size: 17px; line-height: 1.9; }
+.bt-site :is(h1, h2, h3, .bt-brand-name, .bt-footer-name, .bt-profile-name, .bt-card-title, .bt-t) { font-family: var(--font-head); }
+
+/* ---------- 1カラム（本文の列は 720px。サイドバーは本文の下で、中身がなければ出さない） ---------- */
+.bt-container { max-width: 1040px; }
+.bt-layout { grid-template-columns: minmax(0, 1fr); gap: 72px; padding-block: 0 120px; }
+.bt-main, .bt-sidebar { width: 100%; max-width: var(--measure); margin-inline: auto; }
+.bt-sidebar { display: grid; gap: 24px; }
+.bt-sidebar:not(:has(.bt-widget, .bt-widget-raw)) { display: none; }
+.bt-widget { background: var(--paper2); border: 0; border-radius: var(--radius-l); box-shadow: none; }
+.bt-widget-title { border-bottom: 2px dotted var(--line); }
+
+/* ---------- ヘッダー：左にサイト名（丸い印つき）と説明、ナビは丸いボタン ---------- */
+.bt-header { background: transparent; border-bottom: 0; }
+.bt-header-top { padding-block: 32px 0; }
+.bt-brand { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 18px; }
+.bt-brand-name { display: inline-flex; align-items: center; gap: 10px; font-size: 27px; font-weight: 900; letter-spacing: .06em; line-height: 1.4; }
+.bt-brand-name::before { content: ""; width: 14px; height: 14px; border-radius: 50%; background: var(--main); flex: none; }
+.bt-brand-name:has(img)::before { display: none; }
+.bt-brand-name img { max-height: 52px; }
+.bt-brand-desc { margin: 0; font-size: 14px; letter-spacing: .06em; }
+.bt-icon-btn { width: 44px; height: 44px; padding: 0; border: 0; border-radius: 50%; }
+.bt-site .bt-icon-btn:hover { background: var(--tint); color: var(--fg); }
+.bt-gnav { margin-top: 20px; border-top: 0; }
+.bt-gnav-inner { flex-wrap: wrap; gap: 8px 16px; padding-block: 0 4px; }
+.bt-gnav-list { gap: 6px; }
+.bt-site .bt-gnav-list a { padding: 8px 18px; border: 0; border-radius: 999px; font-size: 15px; letter-spacing: .06em; transition: background-color .2s, color .2s; }
+.bt-site .bt-gnav-list a:hover { background: var(--tint); color: var(--fg); }
+.bt-site .bt-gnav-list a[aria-current="page"] { background: var(--tint2); color: var(--heading); }
+.bt-search input { width: 200px; height: 40px; border-radius: 999px; background: var(--paper2); border-color: transparent; }
+
+/* ---------- 共通の部品 ---------- */
+.bt-breadcrumb { margin: 32px 0 0; font-size: 13px; }
+.bt-breadcrumb li + li::before { content: "›"; color: var(--fg-muted); }
+.bt-breadcrumb [aria-current] { max-width: 22em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bt-section-title { display: flex; align-items: center; gap: 10px; margin: 0 0 26px; font-size: 20px; letter-spacing: .06em; }
+.bt-section-title::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--main); flex: none; }
+
+/* トップ・ブログのトップの紹介文：薄いメインの色の、角の丸い面 */
+.bt-intro { margin: 40px 0 48px; padding: 32px 36px; background: var(--tint); border: 0; border-radius: 24px; }
+.bt-intro, .bt-intro p { font-size: 16px; line-height: 2; color: var(--fg); }
+
+/* ---------- 記事の一覧：1列、点線で区切る。アイキャッチがない記事は文字だけ ---------- */
+.bt-post-grid { grid-template-columns: minmax(0, 1fr); gap: 0; }
+.bt-post-grid > li { border-bottom: 2px dotted var(--line); }
+.bt-card { gap: 0; padding: 40px 0; background: transparent; border: 0; border-radius: 0; overflow: visible; }
+.bt-post-grid > li:first-child .bt-card { padding-top: 0; }
+.bt-card:hover { box-shadow: none; }
+.bt-card-thumb { aspect-ratio: 16 / 9; margin: 0 0 22px; border-radius: var(--radius-l); }
+.bt-card-thumb img { transition: transform .6s ease; }
+.bt-card:hover .bt-card-thumb img { transform: scale(1.02); }
+.bt-card-body { padding: 0; gap: 0; }
+.bt-site .bt-card-cat, .bt-site .bt-article-cat {
+	padding: 2px 12px; border-radius: 999px; background: var(--tint);
+	font-size: 13px; font-weight: 500; letter-spacing: .06em; color: var(--main-ink);
+}
+.bt-site .bt-card-cat:hover, .bt-site .bt-article-cat:hover { background: var(--tint2); text-decoration: none; }
+.bt-card-title { display: block; min-height: 0; margin: 12px 0 10px; font-size: 24px; line-height: 1.6; letter-spacing: .03em; text-wrap: balance; word-break: auto-phrase; }
+.bt-site .bt-card:hover .bt-card-title a { color: var(--main-ink); text-decoration: none; }
+.bt-card-excerpt { min-height: 0; margin: 0 0 14px; font-size: 16px; line-height: 1.9; color: var(--fg-soft); }
+.bt-card-foot { padding-top: 0; }
+.bt-card .bt-tag-list { display: none; }
+.bt-card-meta span:first-child .bt-ico, .bt-article-meta span:first-child .bt-ico { display: none; }
+
+/* 関連記事：小さいカードを3列（文字の部分に余白を付けない） */
+.bt-post-grid--small .bt-card-body { padding: 0; }
+.bt-post-grid--small { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+.bt-post-grid--small > li { border-bottom: 0; }
+.bt-post-grid--small .bt-card, .bt-post-grid > li:first-child .bt-post-grid--small .bt-card { padding: 0; }
+.bt-post-grid--small .bt-card-thumb { margin-bottom: 12px; border-radius: var(--radius); }
+.bt-post-grid--small .bt-card-title { margin: 8px 0 6px; font-size: 17px; line-height: 1.65; }
+
+/* ページ送り：丸いボタン。現在のページはメインの面 */
+.bt-pagination { margin-top: 52px; }
+.bt-site .bt-pagination a, .bt-pagination li > span { border: 0; border-radius: 999px; background: transparent; font-weight: 500; }
+.bt-site .bt-pagination a:hover { background: var(--tint); color: var(--fg); }
+.bt-pagination .bt-page-next a, .bt-pagination .bt-page-prev a { background: var(--tint); }
+
+/* ---------- 一覧の見出し ---------- */
+.bt-list-head { margin: 0; padding: 28px 0 40px; background: transparent; border: 0; }
+.bt-list-kicker { margin: 0; font-size: 13px; font-weight: 500; letter-spacing: .1em; color: var(--main-ink); }
+.bt-list-title { margin-top: 6px; font-size: 32px; letter-spacing: .04em; line-height: 1.5; }
+.bt-list-count { font-family: var(--font-body); font-size: 15px; }
+.bt-empty { padding: 48px 28px; background: var(--paper2); border: 0; border-radius: 24px; }
+
+/* ---------- 記事の詳細・固定ページ ---------- */
+.bt-article { padding: 0; background: transparent; border: 0; box-shadow: none; }
+.bt-article-head { padding: 32px 0 36px; }
+.bt-article-title { margin: 16px 0 18px; font-size: 32px; line-height: 1.6; letter-spacing: .04em; text-wrap: balance; }
+.bt-article-tags { margin-top: 16px; }
+.bt-byline { display: none; }
+.bt-eyecatch { margin: 0 0 56px; aspect-ratio: 16 / 9; border-radius: var(--radius-l); }
+.bt-site .bt-tag { height: 36px; padding: 0 14px; border: 0; background: var(--paper2); font-size: 14px; color: var(--fg-soft); }
+.bt-site .bt-tag:hover { background: var(--tint); color: var(--fg); }
+.bt-tag::before { color: var(--main-ink); }
+
+/* ---------- 本文：17.5px・行間 1.95。見出しは丸い印、引用と箇条書きは面 ---------- */
+.bt-post-body { max-width: none; font-size: 17.5px; line-height: 1.95; letter-spacing: .03em; }
+.bt-post-body p + p { margin-top: 1.6em; }
+.bt-post-body h2 {
+	position: relative; margin-top: 3em; padding: 0 0 0 1.1em; border: 0;
+	font-family: var(--font-head); font-size: 1.3em; line-height: 1.6; letter-spacing: .04em;
+}
+.bt-post-body h2::before { content: ""; position: absolute; left: 0; top: .5em; width: .6em; height: .6em; border-radius: 50%; background: var(--main); }
+.bt-post-body h3 { margin-top: 2.4em; padding: 0 0 .3em; border-bottom: 2px dotted var(--line); font-family: var(--font-head); font-size: 1.08em; line-height: 1.7; }
+.bt-post-body :is(.bge-title-h2, .bge-title-h3) { margin-top: 0; }
+.bt-post-body strong { background: linear-gradient(transparent 62%, color-mix(in oklab, var(--main) 26%, transparent) 62%); }
+.bt-post-body em { font-style: normal; -webkit-text-emphasis: filled dot; text-emphasis: filled dot; -webkit-text-emphasis-color: var(--main); text-emphasis-color: var(--main); }
+.bt-post-body blockquote:not(:has(> p:first-child > strong:only-child)) {
+	position: relative; margin-block: 2.4em; padding: 1.6em 1.8em 1.4em 3.4em;
+	border: 0; border-radius: var(--radius-l); background: var(--tint); font-size: .95em; line-height: 2; color: var(--fg);
+}
+.bt-post-body blockquote:not(:has(> p:first-child > strong:only-child))::before {
+	content: "“"; position: absolute; left: .45em; top: .15em; font-family: var(--font-head); font-size: 3em; line-height: 1; color: var(--main-ink);
+}
+.bt-post-body blockquote:not(:has(> p:first-child > strong:only-child)) > p:last-child:not(:first-child) { margin-top: .8em; text-align: right; font-size: .86em; color: var(--fg-muted); }
+.bt-post-body :is(.bgt-image img, figure img, p > img) { border: 0; border-radius: var(--radius-l); }
+.bt-post-body :is(figcaption, .bgt-image__caption, [data-bge="caption"]) { margin-top: .8em; font-size: 14px; line-height: 1.8; }
+.bt-post-body ul { padding: 1.1em 1.4em 1.1em 2.6em; border-radius: var(--radius-l); background: var(--paper2); }
+.bt-post-body li ul { padding: 0 0 0 1.4em; background: none; }
+.bt-post-body li::marker { color: var(--main); }
+.bt-post-body hr { height: auto; margin-block: 3em; border: 0; overflow: visible; text-align: center; color: var(--main-ink); }
+.bt-post-body hr::after { content: "・・・"; padding-left: .5em; font-size: 1.2em; letter-spacing: .5em; }
+
+/* ---------- シェア（本文の下に1か所。薄い面に丸いボタン） ---------- */
+.bt-share { gap: 8px; margin: 40px 0 0; padding: 22px 24px; border-radius: var(--radius-l); background: var(--paper2); }
+.bt-share-label { width: 100%; margin: 0 0 2px; font-size: 14px; font-weight: 500; }
+.bt-site .bt-share a { height: 44px; padding: 0 16px; border: 0; border-radius: 999px; background: var(--bg); font-size: 14px; font-weight: 500; }
+.bt-site .bt-share a:hover { background: var(--tint2); color: var(--heading); }
+
+/* ---------- 書き手のプロフィール（ウィジェットエリア「記事の下：著者」） ---------- */
+.bt-author-box { grid-template-columns: 120px minmax(0, 1fr); gap: 0 28px; margin-top: 48px; padding: 36px; border: 0; border-radius: 28px; background: var(--tint); }
+.bt-avatar { border: 4px solid var(--bg); }
+.bt-author-box .bt-avatar { width: 120px; height: 120px; grid-row: span 6; }
+.bt-author-box .bt-label { margin-bottom: 4px; font-size: 13px; font-weight: 500; letter-spacing: .08em; color: var(--main-ink); }
+.bt-author-box .bt-profile-name { font-size: 22px; letter-spacing: .06em; }
+.bt-author-box .bt-profile-role { margin: 0 0 12px; font-size: 14px; }
+.bt-author-box .bt-profile-bio { margin-bottom: 16px; font-size: 16px; line-height: 1.9; }
+.bt-site .bt-sns-list a { height: 38px; padding: 0 14px; border: 0; border-radius: 999px; background: var(--bg); font-size: 14px; font-weight: 500; }
+.bt-author-more { grid-column: 2; justify-self: start; margin-top: 16px; font-size: 14px; font-weight: 500; }
+
+/* ---------- 前後の記事：角の丸い面 ---------- */
+.bt-post-nav { gap: 14px; margin-top: 40px; }
+.bt-site .bt-post-nav a { padding: 22px 24px; border: 0; border-radius: var(--radius-l); background: var(--paper2); font-size: 16px; line-height: 1.7; transition: background-color .2s; }
+.bt-site .bt-post-nav a:hover { background: var(--tint); }
+.bt-post-nav .bt-label { font-size: 13px; font-weight: 500; }
+
+.bt-block { margin-top: 88px; }
+
+/* ---------- コメント（吹き出し）・フォーム ---------- */
+.bt-comments { padding: 0; background: transparent; border: 0; box-shadow: none; }
+.bt-comment-list { display: grid; gap: 14px; }
+.bt-comment, .bt-comment:first-child { padding: 20px 24px; border: 0; border-radius: 20px 20px 20px 6px; background: var(--paper2); }
+.bt-comment-form h3 { font-family: var(--font-head); font-size: 20px; }
+.bt-site :is(.bt-field, .bt-form) :is(input:not([type="radio"], [type="checkbox"], [type="submit"], [type="button"], [type="image"], [type="hidden"]), select) { min-height: 52px; }
+.bt-site :is(.bt-field, .bt-form) :is(input:not([type="radio"], [type="checkbox"], [type="submit"], [type="button"], [type="image"], [type="hidden"]), textarea, select) {
+	padding: 12px 16px; border: 1.5px solid var(--line-strong); border-radius: var(--radius); background: var(--field);
+}
+.bt-site :is(.bt-field, .bt-form) :is(input, textarea, select):focus { outline: none; border-color: var(--main-ink); box-shadow: 0 0 0 4px var(--tint2); }
+.bt-form .required { border-radius: 999px; background: var(--tint); color: var(--main-ink); }
+.bt-btn { min-height: 52px; padding: 0 34px; border-radius: 999px; font-size: 16px; letter-spacing: .06em; }
+.bt-form-page .bt-article-head { text-align: center; }
+.bt-form-steps { justify-content: center; margin-top: 40px; }
+
+/* ---------- フッター：上の角が丸い薄い面。書き手のプロフィール（ウィジェットエリア「フッター：プロフィール」）とナビ ---------- */
+.bt-footer { margin-top: 0; padding-block: 56px 32px; background: var(--paper2); border: 0; border-radius: 40px 40px 0 0; }
+.bt-footer-inner { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 56px; }
+.bt-footer-profile { max-width: none; }
+.bt-footer-profile .bt-profile { grid-template-columns: 80px minmax(0, 1fr); align-items: start; gap: 4px 20px; }
+.bt-footer-profile .bt-avatar { width: 80px; height: 80px; grid-row: span 2; }
+.bt-footer-profile .bt-profile-name { font-size: 18px; }
+.bt-footer-profile .bt-profile-bio { grid-column: 2; font-size: 15px; line-height: 1.9; color: var(--fg-soft); }
+.bt-footer-name { display: flex; align-items: center; gap: 8px; font-size: 18px; font-weight: 900; letter-spacing: .06em; }
+.bt-footer-name::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--main); }
+.bt-footer-nav ul { gap: 4px 20px; }
+.bt-site .bt-footer-nav a { min-height: 40px; font-size: 15px; }
+.bt-site .bt-footer-nav a:hover { color: var(--main-ink); text-decoration: none; }
+.bt-copyright { margin-top: 48px; text-align: center; font-size: 13px; }
+
+/* ---------- 動き ---------- */
+@media (prefers-reduced-motion: no-preference) {
+	.bt-main { animation: bt-fade .5s ease; }
+	@keyframes bt-fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+}
+
+/* ---------- スマホ ---------- */
+@container site (max-width: 760px) {
+	body { font-size: 16px; }
+	.bt-container { padding-inline: 20px; }
+	.bt-header-top { padding-block: 18px 0; }
+	.bt-brand { display: block; }
+	.bt-brand-name { font-size: 21px; gap: 8px; }
+	.bt-brand-name::before { width: 11px; height: 11px; }
+	.bt-brand-name img { max-height: 36px; }
+	.bt-brand-desc { font-size: 12px; margin-top: 2px; }
+	.bt-gnav { margin-top: 14px; padding: 8px; border-radius: var(--radius-l); background: var(--paper2); }
+	.bt-gnav-list { gap: 2px; }
+	.bt-site .bt-gnav-list a { padding: 12px 16px; border-bottom: 0; border-radius: var(--radius); font-size: 16px; }
+	.bt-site .bt-gnav-list a[aria-current="page"] { box-shadow: none; padding-left: 16px; }
+	.bt-search input { width: 100%; background: var(--bg); }
+	.bt-layout { gap: 56px; padding-bottom: 88px; }
+	.bt-intro { margin: 28px 0 36px; padding: 24px 22px; }
+	.bt-card { padding: 32px 0; }
+	.bt-card-title { font-size: 20px; }
+	.bt-list-title { font-size: 25px; }
+	.bt-article, .bt-comments { margin-inline: 0; padding: 0; }
+	.bt-article-title { font-size: 24px; }
+	.bt-eyecatch { margin: 0 0 40px; }
+	.bt-post-body { font-size: 17px; }
+	.bt-post-body blockquote:not(:has(> p:first-child > strong:only-child)) { padding: 1.3em 1.2em 1.2em 2.6em; }
+	.bt-post-body blockquote:not(:has(> p:first-child > strong:only-child))::before { left: .2em; }
+	.bt-author-box { grid-template-columns: minmax(0, 1fr); gap: 0; padding: 26px 22px; }
+	.bt-author-box .bt-avatar { width: 88px; height: 88px; grid-row: auto; margin-bottom: 14px; }
+	.bt-author-box :is(.bt-profile-bio, .bt-sns-list), .bt-author-more { grid-column: 1; }
+	.bt-site .bt-post-nav .bt-next { text-align: left; align-items: flex-start; }
+	.bt-block { margin-top: 64px; }
+	.bt-post-grid--small { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+	.bt-footer { padding-top: 44px; border-radius: 28px 28px 0 0; }
+	.bt-footer-inner { grid-template-columns: minmax(0, 1fr); gap: 36px; }
+}
